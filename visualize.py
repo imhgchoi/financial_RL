@@ -10,7 +10,7 @@ class Visualize :
         self.ratios(wrangled)
 
     def candle_stick(self, wrangled):
-        fig = plt.figure(figsize = (17,3))
+        fig = plt.figure(figsize = (28,5))
         ax = fig.add_subplot(1,1,1)
         mplfin.candlestick2_ohlc(ax, width=1, colorup='r', colordown='b',
                                  opens = wrangled['Adj. Open'], highs = wrangled['Adj. High'],
@@ -19,7 +19,7 @@ class Visualize :
         plt.close()
 
     def moving_average(self, wrangled):
-        fig = plt.figure(figsize = (17,3))
+        fig = plt.figure(figsize = (28,5))
         ax = fig.add_subplot(1,1,1)
         ax.plot(wrangled['Adj. Close'], color='black', linewidth=0.8)
         ax.plot(wrangled['Close_MA5'], label='ma5', color='yellow', linewidth=0.5)
@@ -32,7 +32,7 @@ class Visualize :
         plt.close()
 
     def bollinger_bands(self, wrangled):
-        fig = plt.figure(figsize = (17,3))
+        fig = plt.figure(figsize = (28,5))
         ax = fig.add_subplot(1,1,1)
         ax.plot(wrangled['Adj. Close'], color='black', linewidth=0.8)
         ax.plot(wrangled['bollinger_upper'], label='upper', color='red', linewidth=0.5)
@@ -42,13 +42,13 @@ class Visualize :
         plt.close()
 
     def ratios(self, wrangled):
-        fig = plt.figure(figsize = (17,3))
+        fig = plt.figure(figsize = (28,5))
         ax = fig.add_subplot(1,1,1)
         ax.plot(wrangled['close_lastclose_ratio'], color='black', linewidth=0.8)
         plt.savefig(str(os.getcwd()).replace('\\','/')+'/images/close_lastclose_ratio.png')
         plt.close()
 
-        fig = plt.figure(figsize = (17,3))
+        fig = plt.figure(figsize = (28,5))
         ax = fig.add_subplot(1,1,1)
         ax.plot(wrangled['vol_lastvol_ratio'], color='black', linewidth=0.8)
         plt.savefig(str(os.getcwd()).replace('\\','/')+'/images/vol_lastvol_ratio.png')
