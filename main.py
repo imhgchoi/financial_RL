@@ -1,7 +1,11 @@
 from data_import import Data
 from data_wrangle import Wrangle
 from visualize import Visualize
+from environment import Environment
+from agent import Agent
 from reinforce import Reinforce
+
+
 
 if __name__ == '__main__' :
     """
@@ -13,10 +17,14 @@ if __name__ == '__main__' :
     API_KEY refers to the Quandl API token. Create an account if you do not have access to tokens
     Quandl signin URL : https://www.quandl.com/sign-up-modal?defaultModal=showSignUp
     If you plan to use data stored locally, you may leave the API_KEY as it is.
+    
+    The INITIAL_BALANCE refers to the amount of money in dollars you want to start in trading in an episode.
     """
     data_dir = 'D:/rawDataFiles/stock_data'
-    TICKER = 'A'
+    TICKER = 'AAPL'
     API_KEY = ''
+
+    INITIAL_BALANCE = 0
 
     data = Data(TICKER, API_KEY, data_dir)
     print(str(data.ticker)+"'s raw data shape is "+str(data.data.shape))
@@ -27,4 +35,7 @@ if __name__ == '__main__' :
 
     visualize = Visualize(wrangled.data)
 
+
+    environment = Environment(wrangled.data)
+    agent = Agent(environment, INITIAL_BALANCE, min_trade=1, max_trade=5, delayed_reward_threshold=.05)
     #reinforce = Reinforce(wrangled.data)
