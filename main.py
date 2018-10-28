@@ -15,7 +15,7 @@ if __name__ == '__main__' :
     If you plan to use data stored locally, you may leave the API_KEY as it is.
     """
     data_dir = 'D:/rawDataFiles/stock_data'
-    TICKER = 'AAPL'
+    TICKER = 'A'
     API_KEY = ''
 
     data = Data(TICKER, API_KEY, data_dir)
@@ -25,6 +25,6 @@ if __name__ == '__main__' :
     print(str(data.ticker)+"'s wrangled data head(5) is as follows")
     print(wrangled.data.head(5))
 
-    #visualize = Visualize(wrangled.data)
+    visualize = Visualize(wrangled.data)
 
     #reinforce = Reinforce(wrangled.data)

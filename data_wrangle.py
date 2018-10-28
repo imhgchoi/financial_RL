@@ -16,11 +16,14 @@ class Wrangle :
         open_lastclose_ratio : ratio between open price and last period's close price
         high_close_ratio : ratio between high price and close price
         low_close_ratio : ratio between low price and close price
-
+        close_lastclose_ratio : ratio between close price and last period's close price
+        vol_lastvol_ratio : ratio between volume and last period's volume
+        bollinger_band : the upper and lower boundaries of the bollinger band. I used a standard 20-day bollinger band
         """
         self.data = data
         self.moving_average()
         self.ratio()
+        self.bollinger_band()
 
     def moving_average(self):
         windows = [5, 10, 20, 60, 120]
@@ -54,16 +57,44 @@ class Wrangle :
             self.data['Volume_MA{}'.format(window)] = ma
 
     def ratio(self):
-        pass
+        self.open_lastclose_ratio()
+        self.high_close_ratio()
+        self.low_close_ratio()
+        self.close_lastclose_ratio()
+        self.vol_lastvol_ratio()
 
     def open_lastclose_ratio(self):
-        pass
+        self.data['open_lastclose_ratio'] = np.zeros(len(self.data))
+        self.data['open_lastclose_ratio'].iloc[1:] = \
+            (self.data['Adj. Open'][1:].values  - self.data['Adj. Close'][:-1].values)/self.data['Adj. Close'][:-1].values
 
     def high_close_ratio(self):
-        pass
+        self.data['high_close_ratio'] = \
+            (self.data['Adj. High'].values - self.data['Adj. Close'].values)/self.data['Adj. Close'].values
 
     def low_close_ratio(self):
-        pass
+        self.data['low_close_ratio'] = \
+            (self.data['Adj. Low'].values - self.data['Adj. Close'].values)/self.data['Adj. Close'].values
 
-    def
+    def close_lastclose_ratio(self):
+        self.data['close_lastclose_ratio'] = np.zeros(len(self.data))
+        self.data['close_lastclose_ratio'].iloc[1:] = \
+            (self.data['Adj. Close'][1:].values  - self.data['Adj. Close'][:-1].values)/self.data['Adj. Close'][:-1].values
 
+    def vol_lastvol_ratio(self):
+        self.data['vol_lastvol_ratio'] = np.zeros(len(self.data))
+        self.data['vol_lastvol_ratio'].iloc[1:] = \
+            (self.data['Adj. Volume'][1:].values  - self.data['Adj. Volume'][:-1].values)/self.data['Adj. Volume'][:-1].values
+
+    def bollinger_band(self):
+        close = self.data['Adj. Close']
+        pads = list()
+
+        for i in range(20):
+            pads.append(np.std(list(close)[:i+1]))
+
+        std = self.data['Adj. Close'].rolling(window=20).std()
+        std[:20] = pads
+
+        self.data['bollinger_upper'] = self.data['Close_MA20'] + 2 * std
+        self.data['bollinger_lower'] = self.data['Close_MA20'] - 2 * std
